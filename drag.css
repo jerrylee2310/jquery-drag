@@ -1,0 +1,85 @@
+.drop-box{
+    height: 30px;
+    margin: 5px;
+    position: relative;
+}
+.drop{
+    height: 24px;
+    border-radius: 2px;
+    border: 1px dashed #CCC;
+    padding-bottom: 4px;
+    overflow: hidden;
+    z-index: 1;
+}
+.overDrop {
+    height: auto;
+    min-height: 24px;
+    z-index: 98;
+    position: absolute;
+    background: #F7FCFE;
+}
+.drop-item{
+    padding: 0 4px;
+    margin: 4px 0 0px 6px;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    background-color: #f6eedb;
+    outline: #f0e4ca solid 1px;
+    float: left;
+}
+.drop-item:hover{
+    background-color:#CCCCCC;
+}
+.item-name{
+    float: left;
+    font-size: 12px;
+}
+.btn-common{
+    float: right;
+    visibility: hidden;
+    margin: 3px 0 0 2px;
+}
+.item-hover{
+    background-color: #F7FCFE;
+}
+#dragging{
+    position: absolute;
+    padding:0 4px;
+    background-color:#eee;
+    border:1px solid deepskyblue;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    z-index: 99;
+}
+#drop-in{
+    float:left;
+    padding:0 4px;
+    margin: 4px 0 0 6px;
+    background-color:#eee;
+    outline:1px solid deepskyblue;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+    opacity: 0.4;
+    z-index: 99;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+}
+#drop-to{
+    padding: 0 4px;
+    margin: 4px 0 0 6px;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    background-color: #f6eedb;
+    outline: #f0e4ca solid 1px;
+    float: left;
+    font-size: 12px;
+    opacity: 0.2;
+    z-index: 99;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=20);
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=20);
+}
