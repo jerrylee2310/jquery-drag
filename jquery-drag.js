@@ -16,7 +16,12 @@
             'dragging':false,
             'dragSelf':false,
             'itemId':'',
+            'itemTitle':'',
+            'moveFlag':false,
             'event': function () {
+                return false;
+            },
+            'callback': function () {
                 return false;
             }
         };
@@ -74,18 +79,30 @@
                 var e = e || window.event;
                 var target = e.target || e.srcElement;
                 if($(target).hasClass('btn-remove')){
-                    $(this).remove();
-                    self.overDrop(drop_box);
+                    var _this = $(this);
+                    $(document).bind('mouseup',function(e) {
+                        self.stopBubble(e);
+                        _this.remove();
+                        self.overDrop(drop_box);
+                        $(document).unbind('mouseup');
+                        return false;
+                    });
                 }else if(drop_box.attr('data-btn') && $(target).hasClass('btn-'+drop_box.attr('data-btn'))) {
                     self.options.event($(this));
                     return false;
                 }else{
                     if(self.options.dragAgain){
-                        $(this).remove();
-                        self.overDrop(drop_box);
+                        var _this = $(this);
                         self.options.dragSelf = true;
                         self.mouseDownEvent(e);
                         $(document).bind('mousemove',function(e) {
+                            if(!self.options.moveFlag){
+                                self.options.moveFlag = true;
+                            }
+                            if($('#dragging').length === 0){
+                                _this.remove();
+                                self.overDrop(drop_box);
+                            }
                             if (self.options.dragSelf) {
                                 self.mouseMoveEvent(e);
                                 return false;
@@ -93,12 +110,20 @@
                         });
                         $(document).bind('mouseup',function(e) {
                             self.stopBubble(e);
-                            if(self.judgeMouse(e,self.options.drop)){
-                                var drop_box = $('.'+self.options.drop).eq(self.options.index);
-                                self.mouseUpEvent(e,'drop-to',drop_box);
-                            }else if($('#drop-to').length > 0){
-                                var drop_box = $('#drop-to').parent();
-                                self.mouseUpEvent(e,'drop-to',drop_box);
+                            if(self.options.moveFlag){
+                                if(self.judgeMouse(e,self.options.drop)){
+                                    var drop_b = $('.'+self.options.drop).eq(self.options.index);
+                                    self.mouseUpEvent(e,'drop-to',drop_b);
+                                }else if($('#drop-to').length > 0){
+                                    var drop_b = $('#drop-to').parent();
+                                    self.mouseUpEvent(e,'drop-to',drop_b);
+                                }
+                                self.options.moveFlag = false;
+
+                            }else{
+                                if(drop_box.attr('data-btn')){
+                                    self.options.callback();
+                                }
                             }
                             self.options.dragSelf = false;
                             self.removeBind();
@@ -176,22 +201,27 @@
         // mousedown之后事件
         mouseDownEvent: function (event) {
             var self = this;
-            if($(event.target).hasClass('drag-item')){
-                self.options.itemId = $(event.target).attr('id');
-            }else{
-                self.options.itemId = $(event.target).parents('.drag-item').attr('id');
+            if($(event.target).hasClass('drag-item') || $(event.target).hasClass('drop-item')){
+                self.options.itemId = $(event.target).attr('data-id');
+                self.options.itemTitle = $(event.target).attr('data-title');
+            }else if($(event.target).parents('.drag-item').length > 0){
+                self.options.itemId = $(event.target).parents('.drag-item').attr('data-id');
+                self.options.itemTitle = $(event.target).parents('.drag-item').attr('data-title');
+            }else if($(event.target).parents('.drop-item').length > 0){
+                self.options.itemId = $(event.target).parents('.drop-item').attr('data-id');
+                self.options.itemTitle = $(event.target).parents('.drop-item').attr('data-title');
             }
-            self.options.draggingTitle = $(event.target).text();
-            var drager = '<div id="dragging">'+self.options.draggingTitle+'</div>';
-            $("body").append(drager);
-            var oX = event.clientX+15;
-            var oY = event.clientY;
-            $("#dragging").css({"left":oX + "px", "top":oY + "px"});
+            var text = $(event.target).text();
+            self.options.draggingTitle = text.split('(')[0];
         },
         // mousemove之后事件
         mouseMoveEvent: function (event) {
             var self = this;
             var e = event || window.event;
+            if($('#dragging').length === 0){
+                var drager = '<div id="dragging">'+self.options.draggingTitle+'</div>';
+                $("body").append(drager);
+            }
             var oX = e.clientX+15;
             var oY = e.clientY;
             $("#dragging").css({"left":oX + "px", "top":oY + "px"});
@@ -301,8 +331,8 @@
         addItemJugde: function (e,drop_box) {
             var self = this;
             var title = '',button = '';
-            if(drop_box.attr('data-title')){
-                title = '(' + drop_box.attr('data-title') + ')';
+            if(drop_box.attr('data-title') === 'y'){
+                title = '(' + self.options.itemTitle + ')';
             }else{
                 title = '';
             }
@@ -311,8 +341,7 @@
             }else{
                 button = '';
             }
-            var drop_item = '<div class="drop-item">' +
-                                '<input type="hidden" class="item-id" value="'+ self.options.itemId +'"/>' +
+            var drop_item = '<div class="drop-item" data-id="'+ self.options.itemId +'" data-title="'+ self.options.itemTitle +'">' +
                                 '<span class="item-name">'+self.options.draggingTitle+ title +'</span>' +
                                 button + '<img class="btn-common btn-remove" src="close.png"/>' +
                             '</div>';

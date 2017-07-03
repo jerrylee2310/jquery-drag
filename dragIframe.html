@@ -22,7 +22,10 @@
         $(function(){
             $('.drag-tree').drag({
                 event: function (_this) {
-                    console.log(_this.find('.item-id').val());
+                    console.log(_this.attr('data-id'));
+                },
+                callback: function () {
+                    console.log(1234555);
                 }
             });
         });
@@ -32,20 +35,20 @@
     <div class="center">
         <div class="drag-box">
             <ul class="drag-tree">
-                <li class="drag-item" id="id111"><a href="javascript:void(0);">拖拽项目1</a></li>
-                <li class="drag-item" id="id112"><a href="javascript:void(0);">拖拽项目2</a></li>
-                <li class="drag-item" id="id113"><a href="javascript:void(0);">拖拽项目3</a></li>
-                <li class="drag-item" id="id114"><a href="javascript:void(0);">拖拽项目4</a></li>
-                <li class="drag-item" id="id115"><a href="javascript:void(0);">拖拽项目5</a></li>
-                <li class="drag-item" id="id116"><a href="javascript:void(0);">拖拽项目6</a></li>
-                <li class="drag-item" id="id117"><a href="javascript:void(0);">拖拽项目7</a></li>
-                <li class="drag-item" id="id118"><a href="javascript:void(0);">拖拽项目8</a></li>
-                <li class="drag-item" id="id119"><a href="javascript:void(0);">拖拽项目9</a></li>
+                <li class="drag-item" data-id="id111" data-title="汇总"><a href="javascript:void(0);">拖拽项目1</a></li>
+                <li class="drag-item" data-id="id112" data-title="汇总"><a href="javascript:void(0);">拖拽项目2</a></li>
+                <li class="drag-item" data-id="id113" data-title="汇总"><a href="javascript:void(0);">拖拽项目3</a></li>
+                <li class="drag-item" data-id="id114" data-title="计数"><a href="javascript:void(0);">拖拽项目4</a></li>
+                <li class="drag-item" data-id="id115" data-title="计数"><a href="javascript:void(0);">拖拽项目5</a></li>
+                <li class="drag-item" data-id="id116" data-title="计数"><a href="javascript:void(0);">拖拽项目6</a></li>
+                <li class="drag-item" data-id="id117" data-title="汇总"><a href="javascript:void(0);">拖拽项目7</a></li>
+                <li class="drag-item" data-id="id118" data-title="计数"><a href="javascript:void(0);">拖拽项目8</a></li>
+                <li class="drag-item" data-id="id119" data-title="汇总"><a href="javascript:void(0);">拖拽项目9</a></li>
             </ul>
             <div class="box">
                 <div class="drop-box"><div class="drop"></div></div>
                 <div class="drop-box"><div class="drop"></div></div>
-                <div class="drop-box"><div class="drop" data-title="计数"></div></div>
+                <div class="drop-box"><div class="drop" data-title="y"></div></div>
                 <div class="drop-box"><div class="drop drop-single" data-btn="click"></div></div>
             </div>
             <div class="clear"></div>

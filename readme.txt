@@ -38,3 +38,9 @@
                     console.log(this.itemId);
                 }
             });
+        7.有data-btn属性的拖放框内点击拖拽元素会有callback函数，如
+            $('.drap-tree').drag({
+                callback: function () {
+                    console.log(1);
+                }
+            });
